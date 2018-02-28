@@ -7,7 +7,9 @@ const applicationSchema = new Schema({
   user: {
     type: ObjectId,
     ref: 'User'
-  }
+  },
+  apiKey:Object,
+  apiSecret:Object
 }, {
   timestamps: {
     createdAt: "created_at",
@@ -15,6 +17,6 @@ const applicationSchema = new Schema({
   }
 });
 
-const RegApplication = mongoose.model("RegApplication", applicationSchema);
+const UserApplication = mongoose.model("UserApplication", applicationSchema);
 
-module.exports = RegApplication;
+module.exports = UserApplication;
