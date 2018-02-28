@@ -5,11 +5,11 @@ const router  = express.Router();
 
 const authentication  = require('./auth');
 const userView  = require('./company-details');
-const application = require ('./application');
+const application = require ('./customer-apps');
 
 router.use('/auth', authentication);
 router.use('/company-details', userView);
-router.use('/application', application);
+router.use('/customer-apps', application);
 
 
 module.exports = router;
