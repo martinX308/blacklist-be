@@ -41,7 +41,7 @@ router.post('/create', (req, res, next) => {
 
       return newApplication.save()
         .then(() => {
-          res.status(200).json(newApplication);
+          res.status(201).json(newApplication);
         });
     })
     .catch(next);

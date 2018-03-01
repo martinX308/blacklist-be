@@ -12,7 +12,7 @@ const blacklist = require ('./blacklist');
 router.use('/auth', authentication);
 router.use('/company-details', userView);
 router.use('/customer-apps', application);
-router.use('/fraud-case', blacklist);
+router.use('/blacklist-entry', blacklist);
 
 
 module.exports = router;
