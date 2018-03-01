@@ -55,15 +55,4 @@ router.post('/check', authCheck,(req,res,next) => {
 })
 
 
-router.get('/mylog',authCheck,(req,res,next) => {
-  const auth = req.get("authorization");
-  const credentials = new Buffer(auth.split(" ").pop(), "base64").toString("ascii").split(":");
-
-  RequestLog.find({api:credentials[0]})
-    .then((requests) => {
-      res.status(200).json(requests);
-    });
- 
-});
-
 module.exports = router;

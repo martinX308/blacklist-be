@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const uuidv4 = require ('uuid/v4');
 
 const UserApplication = require('../../models/user-application');
+const RequestLog = require('../../models/request-log');
 
 
 router.post('/create', (req, res, next) => {
@@ -57,4 +58,38 @@ router.get ('/getList/:id', (req, res, next) => {
     });
 })
 
+router.get('/mylog',(req,res,next) => {
+  const user = req.session.currentUser;
+  let apiLog = [];
+
+  UserApplication.find({"user":user._id}).lean()
+    .then((result) => {
+       return result.reduce(
+          (acc,element) => {
+          return RequestLog.find({"api":element.apiKey.token},'created_at api response')
+          .then((requests) => {
+            if (requests.length > 0) {
+                acc.push(...requests);
+            }
+              return acc;
+            });
+      },[]);
+
+    })
+    .then((apilog) => {
+      res.status(200).json(apilog.map(element => element.toObject()));
+    });
+
+});
+
 module.exports = router;
+
+// async (acc,element) => {
+//   await RequestLog.find({"api":element.apiKey.token})
+//   .then((requests) => {
+//     if (requests.length > 0) {
+//         acc.push(...requests);
+//     }
+//       return acc;
+// });
+// },Promise.resolve());
