@@ -48,7 +48,7 @@ router.post('/create', (req, res, next) => {
     .catch(next);
 });
 
-router.get ('/getList/:id', (req, res, next) => {
+router.get ('/getList', (req, res, next) => {
   const user = req.session.currentUser;
 
   UserApplication.find({user: user._id})

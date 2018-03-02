@@ -32,7 +32,7 @@ router.post('/check', authCheck,(req,res,next) => {
   const auth = req.get("authorization");
   const ddNumber = req.body.ddNumber;
   const credentials = new Buffer(auth.split(" ").pop(), "base64").toString("ascii").split(":");
-  const match = false;
+  let match = false;
 
   BlackistEntry.find({"ddNumber":ddNumber})
     .then((list) => {
