@@ -7,12 +7,13 @@ const BlackistEntry = require('../../models/blacklist-entry');
 const UserApplication = require('../../models/user-application');
 const RequestLog = require('../../models/request-log');
 
-router.post('/add', authCheck,(req,res,next) => {
+// create an blacklist entry with key and secret
+router.post('/add', authCheck,(req,res,next) => { 
   const auth = req.get("authorization");
   const ddNumber = req.body.ddNumber;
   const credentials = new Buffer(auth.split(" ").pop(), "base64").toString("ascii").split(":");
   
-  UserApplication.findOne( {"apiKey.token":credentials[0],"apiSecret.token":credentials[1]})
+  UserApplication.findOne( {"apiKey.token":credentials[0],"apiSecret.token":credentials[1]}) // internal API call to validate key and secret
     .then((application) => {
         const newEntry = BlackistEntry ({
           application:application._id,
@@ -28,6 +29,7 @@ router.post('/add', authCheck,(req,res,next) => {
     .catch(next);
 })
 
+//check against the blacklist
 router.post('/check', authCheck,(req,res,next) => {
   const auth = req.get("authorization");
   const ddNumber = req.body.ddNumber;
@@ -43,7 +45,7 @@ router.post('/check', authCheck,(req,res,next) => {
         res.status(200).json({"match": match});
       }
   })
-  .then( () => {
+  .then( () => { // store response in RequestLog
     const newRequest = RequestLog({
       api:credentials[0],
       response:match

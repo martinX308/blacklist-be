@@ -8,7 +8,7 @@ const uuidv4 = require ('uuid/v4');
 const UserApplication = require('../../models/user-application');
 const RequestLog = require('../../models/request-log');
 
-
+// create new application with key and secret
 router.post('/create', (req, res, next) => {
   let expDate = new Date();
   const applicationName = req.body.application;
@@ -48,6 +48,7 @@ router.post('/create', (req, res, next) => {
     .catch(next);
 });
 
+// get list of applications
 router.get ('/getList', (req, res, next) => {
   const user = req.session.currentUser;
 
@@ -58,6 +59,7 @@ router.get ('/getList', (req, res, next) => {
     });
 })
 
+// get API log for dashboard
 router.get('/mylog',(req,res,next) => {
   const user = req.session.currentUser;
   let apiLog = [];
@@ -66,7 +68,7 @@ router.get('/mylog',(req,res,next) => {
     .then((result) => {
        return result.reduce(
           (acc,element) => {
-          return RequestLog.find({"api":element.apiKey.token},'created_at api response')
+          return RequestLog.find({"api":element.apiKey.token},'created_at api response') // internal API
           .then((requests) => {
             if (requests.length > 0) {
                 acc.push(...requests);
