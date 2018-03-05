@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -16,17 +18,17 @@ const app = express();
 // -- mongoose configuration
 
 mongoose.Promise = Promise;
-mongoose.connect('mongodb://localhost/blacklist-master', {
+mongoose.connect(process.env.MONGODB_URI, {
   keepAlive: true,
   reconnectTries: Number.MAX_VALUE
 });
 
-
 // -- middelwares
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:4200']
+  origin: [process.env.CLIENT_URL]
 }));
+
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
