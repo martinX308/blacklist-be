@@ -84,6 +84,21 @@ router.get('/mylog',(req,res,next) => {
 
 });
 
+
+router.post('/verify',(req,res,next) => {
+  const key = req.body.apiKey;
+  const secret = req.body.apiSecret;
+
+  UserApplication.findOne( {"apiKey.token":key,"apiSecret.token":secret})
+    .then((application) => {
+      if (application === null) {
+        return res.status(403).json({error:"Access Denied (incorrect credentials)"});
+      } else {
+        res.status(200).json({"application":application});
+      }
+  });
+});
+
 module.exports = router;
 
 // async (acc,element) => {
