@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 // -- middelwares
 app.use(cors({
   credentials: true,
-  origin: [process.env.CLIENT_URL]
+  origin: [process.env.CLIENT_URL,process.env.MS1_URL]
 }));
 
 

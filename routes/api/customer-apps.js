@@ -4,6 +4,7 @@ const express    = require('express');
 const router     = express.Router();
 const bcrypt = require('bcrypt');
 const uuidv4 = require ('uuid/v4');
+const axios = require("axios");
 
 const UserApplication = require('../../models/user-application');
 const RequestLog = require('../../models/request-log');
@@ -68,23 +69,34 @@ router.get('/mylog',(req,res,next) => {
     .then((result) => {
        return result.reduce(
           (acc,element) => {
-          return RequestLog.find({"api":element.apiKey.token},'created_at api response') // internal API
-          .then((requests) => {
-            if (requests.length > 0) {
-                acc.push(...requests);
-            }
-              return acc;
-            });
-      },[]);
 
+            const options = {
+              withCredentials: true,
+              headers: {
+                authtoken:element.apiKey.token
+              }
+            };
+            return axios.get (process.env.MS1_URL+'/api/check-log/',options) 
+              .then((requests) => {
+                if (requests.data.apiLog.length > 0) {
+                  acc.push(...requests.data.apiLog);
+                }
+                return acc;
+              });
+            // cors
+            // return RequestLog.find({"api":element.apiKey.token},'created_at api response') // internal API
+            // .then((requests) => {
+            //      res.status(200).json(apilog.map(element => element.toObject()));
+
+      },[]);
     })
     .then((apilog) => {
-      res.status(200).json(apilog.map(element => element.toObject()));
+      res.status(200).json(apilog);
     });
 
 });
 
-
+// verify key and secret
 router.post('/verify',(req,res,next) => {
   const key = req.body.apiKey;
   const secret = req.body.apiSecret;
