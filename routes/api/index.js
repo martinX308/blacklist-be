@@ -14,5 +14,4 @@ router.use('/company-details', userView);
 router.use('/customer-apps', application);
 //router.use('/blacklist-entry', blacklist);
 
-
 module.exports = router;
