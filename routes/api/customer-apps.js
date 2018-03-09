@@ -7,7 +7,6 @@ const uuidv4 = require ('uuid/v4');
 const axios = require("axios");
 
 const UserApplication = require('../../models/user-application');
-const RequestLog = require('../../models/request-log');
 
 // create new application with key and secret
 router.post('/create', (req, res, next) => {
@@ -83,10 +82,6 @@ router.get('/mylog',(req,res,next) => {
                 }
                 return acc;
               });
-            // cors
-            // return RequestLog.find({"api":element.apiKey.token},'created_at api response') // internal API
-            // .then((requests) => {
-            //      res.status(200).json(apilog.map(element => element.toObject()));
 
       },[]);
     })
@@ -112,13 +107,3 @@ router.post('/verify',(req,res,next) => {
 });
 
 module.exports = router;
-
-// async (acc,element) => {
-//   await RequestLog.find({"api":element.apiKey.token})
-//   .then((requests) => {
-//     if (requests.length > 0) {
-//         acc.push(...requests);
-//     }
-//       return acc;
-// });
-// },Promise.resolve());
